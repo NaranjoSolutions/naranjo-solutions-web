@@ -25,6 +25,36 @@ npm run preview
 
 There is no dedicated test runner, formatter, or lint configuration. Verify the homepage, case study, 404 page, mobile layouts, keyboard navigation, and reduced-motion behavior in a browser alongside the check and build commands.
 
+## Continuous integration
+
+The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `dev` or `main`, pushes to either branch, and manual dispatches from GitHub Actions. Its **Check and build** job uses Node.js 24 from `.nvmrc`, installs the lockfile with `npm ci`, then runs `npm run check` and `npm run build`.
+
+The workflow needs only read access to repository contents and no secrets. It caches npm downloads using `package-lock.json` and cancels superseded runs for the same branch or pull request.
+
+## Vercel deployment
+
+The site is configured for Vercel's Git integration. `main` is the production branch; `dev` and feature branches receive preview deployments. The static Astro build needs no Vercel adapter or deployment token in GitHub.
+
+To connect the project:
+
+1. Ensure `main` contains the website and deployment configuration before importing. At setup time, the website is on `dev` and `main` contains only the initial commit; promote the reviewed changes through the repository's pull-request flow first.
+2. In Vercel, import `NaranjoSolutions/naranjo-solutions-web` into your account with project name `naranjo-solutions-web` and the repository root as the root directory.
+3. Select the Astro framework preset and Node.js 24.x. The [Vercel configuration](vercel.json) sets `npm ci` as the install command, `npm run check && npm run build` as the build command, and `dist` as the output directory.
+4. Set the production branch to `main`, keep automatic Git deployments enabled, and enable system environment variables in the project's environment-variable settings.
+5. Record the generated production domain and verify the first deployment. The Vercel project and production URL are **TBD** until the repository is imported.
+
+Vercel runs its own type-check and build before publishing. It does not wait for the GitHub CI result. A failed Vercel check or build prevents that deployment from publishing.
+
+### Site origin
+
+The build uses `SITE_URL` when supplied. Otherwise, it uses `https://` plus Vercel's `VERCEL_PROJECT_PRODUCTION_URL`, which points to production even during preview builds. Local builds without either variable omit canonical and Open Graph URLs.
+
+For a future custom domain, set `SITE_URL` to its full HTTPS origin in both Production and Preview environments and redeploy. Configure a sitemap against the same origin when adding one; no sitemap is currently generated.
+
+### Deployment verification
+
+Confirm CI passes on a pull request and Vercel supplies a preview URL. After promotion to `main`, verify the production homepage, `/work/orthopedic-spine/`, favicon, and generated hero images. An unknown route must return HTTP 404 and display the custom 404 page. Check that canonical and Open Graph URLs use the production origin, including on preview pages.
+
 ## Updating content
 
 - Edit brand, biography, services, and contact settings in `src/config/site.ts`.
@@ -44,12 +74,4 @@ The hero artwork is stored in `src/assets/engineering-workshop.png` and rendered
 
 The contact section provides email (`mailto:`) and phone (`tel:`) links alongside the personal site at `https://alonsovndev.com/`. Contact details are maintained in `src/config/site.ts`. The personal site’s availability is currently unverified; confirm that it is reachable before publication.
 
-The deployment provider and this website’s public origin are **TBD**. Once the origin is known, set `SITE_URL` to its full HTTPS URL during the build to generate canonical and Open Graph URLs. Configure a sitemap against that same origin before publication; no placeholder domain or sitemap is emitted.
-
-Example after selecting the real origin:
-
-```sh
-SITE_URL=https://your-real-domain.example npm run build
-```
-
-The domain above is illustrative; do not publish with it. Deployment, analytics, inquiry forms, and client authentication are not configured.
+Complete the Vercel setup and deployment verification above before publication. Analytics, inquiry forms, and client authentication are not configured.
