@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none">
+  <defs>
+    <linearGradient id="left" x1="8" y1="62" x2="27" y2="17" gradientUnits="userSpaceOnUse"><stop stop-color="#4820ED"/><stop offset=".58" stop-color="#7945FF"/><stop offset="1" stop-color="#A08AFF"/></linearGradient>
+    <linearGradient id="ribbon" x1="19" y1="22" x2="54" y2="59" gradientUnits="userSpaceOnUse"><stop stop-color="#6225F5"/><stop offset=".46" stop-color="#4820DE"/><stop offset="1" stop-color="#2610A6"/></linearGradient>
+    <linearGradient id="upper" x1="26" y1="7" x2="51" y2="39" gradientUnits="userSpaceOnUse"><stop stop-color="#29109A"/><stop offset=".5" stop-color="#4A18D9"/><stop offset="1" stop-color="#7945FF"/></linearGradient>
+    <linearGradient id="right" x1="58" y1="17" x2="52" y2="63" gradientUnits="userSpaceOnUse"><stop stop-color="#8D59FF"/><stop offset=".35" stop-color="#6225F5"/><stop offset="1" stop-color="#3915C8"/></linearGradient>
+  </defs>
+  <path d="M8 31a8 8 0 0 1 2.4-5.7L23 13v34a8 8 0 0 1-2.4 5.7L8 65V31Z" fill="url(#left)"/>
+  <path d="m17 19 8-8a7 7 0 0 1 9.9 0L52 28v17L25 18l-8 8v-7Z" fill="url(#upper)"/>
+  <path d="M50 30a8 8 0 0 1 2.4-5.7L65 12v34a8 8 0 0 1-2.4 5.7L50 64V30Z" fill="url(#right)"/>
+  <path d="M17 22a7 7 0 0 1 9.9 0L50 45a7 7 0 0 0 9.9 0L65 40v12l-9 9a7 7 0 0 1-9.9 0L23 38a7 7 0 0 0-9.9 0L8 43V31l9-9Z" fill="url(#ribbon)"/>
+  <path d="m23 38-9.9-10L8 33v10l5.1-5a7 7 0 0 1 9.9 0Z" fill="#3820CB" opacity=".5"/>
+</svg>

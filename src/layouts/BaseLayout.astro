@@ -1,0 +1,65 @@
+---
+import Brand from '../components/Brand.astro';
+import Arrow from '../components/Arrow.astro';
+import { siteConfig } from '../config/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = `${siteConfig.brand} — Software development & consulting`,
+  description = siteConfig.description,
+  noindex = false,
+} = Astro.props;
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const isHome = Astro.url.pathname === '/';
+const navigation = [
+  { label: 'Work', id: 'work' },
+  { label: 'Services', id: 'services' },
+  { label: 'About', id: 'about' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#173ACB" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header container">
+      <Brand />
+      <nav class="site-nav" aria-label="Main navigation">
+        {navigation.map((item) => (
+          <a href={`${isHome ? '' : '/'}#${item.id}`}>{item.label}</a>
+        ))}
+        <a class="nav-contact" href={isHome ? '#contact' : '/#contact'}>Contact<Arrow diagonal /></a>
+      </nav>
+    </header>
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <footer class="site-footer container">
+      <Brand />
+      <p>Independent engineering.<br />Built with purpose.</p>
+      <div class="footer-credit"><span>© {new Date().getFullYear()} {siteConfig.brand}</span><span>By {siteConfig.owner.name}</span></div>
+    </footer>
+  </body>
+</html>
