@@ -34,6 +34,12 @@ There is no dedicated test runner, formatter, or lint configuration. Verify the 
 
 The clinic artwork is a labeled illustration, not a screenshot. Public project descriptions contain no patient data or private repository links.
 
+## Brand assets
+
+`public/favicon.svg` is the folded N mark used in the header, footer, browser icon, and hero illustration. The wordmark remains live text.
+
+The hero artwork is stored in `src/assets/engineering-workshop.png` and rendered through Astro’s `Image` component as responsive WebP assets. The SVG mark is overlaid on its central card so the logo stays consistent. Its generation prompt is preserved in `src/assets/engineering-workshop.prompt.txt`; the image was created with the built-in image generation tool using the supplied brand and illustration references.
+
 ## Before publication
 
 The contact section provides email (`mailto:`) and phone (`tel:`) links alongside the personal site at `https://alonsovndev.com/`. Contact details are maintained in `src/config/site.ts`. The personal site’s availability is currently unverified; confirm that it is reachable before publication.

@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import engineeringWorkshop from '../assets/engineering-workshop.png';
+import Arrow from './Arrow.astro';
+---
+
+<figure class="hero-art">
+  <div class="hero-art-scene">
+    <Image
+      class="hero-art-image"
+      src={engineeringWorkshop}
+      alt=""
+      widths={[400, 640, 960]}
+      sizes="(min-width: 1440px) 540px, (min-width: 960px) 44vw, (min-width: 640px) 520px, 100vw"
+      format="webp"
+      quality={85}
+      loading="eager"
+      fetchpriority="high"
+    />
+    <img class="hero-art-logo" src="/favicon.svg" width="160" height="160" alt="" />
+  </div>
+  <figcaption class="hero-art-caption">Ideas<Arrow />production</figcaption>
+</figure>
