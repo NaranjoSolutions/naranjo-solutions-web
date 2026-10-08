@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
     name: "Alonso Villanueva",
     role: "Senior Software Engineer & Team Lead",
     biography:
-      "I’m Alonso Villanueva, a Senior Software Engineer & Team Lead. Naranjo Solutions is my freelance and consulting practice, where I build modern, scalable software for clients—from the first conversation to deployment.",
+      "I’m Alonso Villanueva, a Senior Software Engineer. Naranjo Solutions is my freelance and consulting practice, where I build modern, scalable software for clients—from the first conversation to deployment.",
   },
   contact: {
     url: "https://alonsovndev.com/",
