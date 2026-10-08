@@ -1,10 +1,10 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import CaseStudy from '../../components/CaseStudy.astro';
-import { getLocalizedProjects } from '../../content/projects';
+import CaseStudy from '../../../components/CaseStudy.astro';
+import { getLocalizedProjects } from '../../../content/projects';
 
 export async function getStaticPaths() {
-  const projects = await getLocalizedProjects('en');
+  const projects = await getLocalizedProjects('es');
   return projects.map((project) => ({
     params: { id: project.data.projectId },
     props: { project },
