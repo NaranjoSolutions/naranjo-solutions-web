@@ -25,6 +25,14 @@ npm run preview
 
 There is no dedicated test runner, formatter, or lint configuration. Verify the homepage, case study, 404 page, mobile layouts, keyboard navigation, and reduced-motion behavior in a browser alongside the check and build commands.
 
+## Theme preference
+
+The header's Theme selector offers System, Light, and Dark. System follows the device setting, including changes while the page is open. Explicit Light or Dark choices are saved under `naranjo-theme` in localStorage and apply across pages and reloads; selecting System removes the saved override.
+
+The theme is applied before page content renders. Without JavaScript, the site follows the device setting and hides the selector. If storage is unavailable, switching still works for the current page. The logo, hero artwork, and light clinic illustration panel retain their original colors.
+
+When verifying themes, check all three page types in light and dark at desktop and 320px mobile widths. Exercise each choice, reloads, navigation, live device-setting changes, keyboard focus, and reduced motion. Also check an invalid saved preference, blocked storage, and JavaScript disabled; inspect initial rendering with a saved dark preference and text contrast, including button hover states.
+
 ## Continuous integration
 
 The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `dev` or `main`, pushes to either branch, and manual dispatches from GitHub Actions. Its **Check and build** job uses Node.js 24 from `.nvmrc`, installs the lockfile with `npm ci`, then runs `npm run check` and `npm run build`.
