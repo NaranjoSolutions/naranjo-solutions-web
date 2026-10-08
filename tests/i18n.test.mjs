@@ -6,6 +6,8 @@ import { initializeLanguage } from '../src/i18n/browser.ts';
 import { translations } from '../src/i18n/translations.ts';
 
 function browser(options = {}) {
+  const session = new Map(options.pendingScroll ? [['naranjo-language-scroll', options.pendingScroll]] : []);
+  const scrolls = [];
   const storage = new Map(options.saved ? [['naranjo-language', options.saved]] : []);
   const events = new Map();
   const changes = [];
@@ -21,19 +23,34 @@ function browser(options = {}) {
     addEventListener: (eventName, callback) => events.set(`${locale}:${eventName}`, callback),
   }));
   const address = new URL(options.url ?? 'https://example.test/');
+  const viewport = {
+    scrollY: options.scrollY ?? 0,
+    addEventListener: (name, callback) => events.set(name, callback),
+    requestAnimationFrame: (callback) => callback(),
+    scrollTo: ({ top }) => { viewport.scrollY = top; scrolls.push(top); },
+  };
+  const sections = (options.sections ?? (address.hash ? [{ id: address.hash.slice(1), top: 0 }] : [])).map((section) => ({
+    id: section.id, tagName: section.tagName ?? 'SECTION',
+    getBoundingClientRect: () => ({ top: section.top - viewport.scrollY }),
+  }));
   const document = {
-    documentElement: { lang: address.pathname.startsWith('/es/') ? 'es' : 'en', dataset: {} },
+    documentElement: { lang: address.pathname.startsWith('/es/') ? 'es' : 'en', dataset: {}, scrollHeight: options.scrollHeight ?? 10000 },
     addEventListener: (name, callback) => events.set(name, callback),
     dispatchEvent: () => {},
-    querySelectorAll: (query) => query === '[data-language-choice]' ? choices : query === '[data-language-text]' ? [text]
+    querySelectorAll: (query) => query === 'main > section, main > article, main .prose h2' ? sections : query === '[data-language-choice]' ? choices : query === '[data-language-text]' ? [text]
       : query === '[data-language-content]' ? [metadata]
       : query === '[data-language-link]' ? [link] : query === 'a[href]' ? [link, skipLink] : [],
   };
   const context = {
     document, URL, Event,
     navigator: { languages: options.languages ?? ['en-US'] },
-    location: { href: address.href, origin: address.origin, replace: (url) => changes.push(['replace', url]), assign: (url) => changes.push(['assign', url]) },
-    window: { addEventListener: (name, callback) => events.set(name, callback) },
+    location: { href: address.href, origin: address.origin, pathname: address.pathname, replace: (url) => changes.push(['replace', url]), assign: (url) => changes.push(['assign', url]) },
+    window: viewport,
+    sessionStorage: {
+      getItem: (key) => { if (options.blockedSession) throw new Error('Blocked'); return session.get(key) ?? null; },
+      setItem: (key, value) => { if (options.blockedSession) throw new Error('Blocked'); session.set(key, value); },
+      removeItem: (key) => { if (options.blockedSession) throw new Error('Blocked'); session.delete(key); },
+    },
     localStorage: {
       getItem: (key) => { if (options.blocked) throw new Error('Blocked'); return storage.get(key) ?? null; },
       setItem: (key, value) => { if (options.blocked) throw new Error('Blocked'); storage.set(key, value); },
@@ -47,8 +64,9 @@ function browser(options = {}) {
   } : null;
   runInNewContext(`(${initializeLanguage.toString()})((${createLanguageTools.toString()})(), ${JSON.stringify(messages)});`, context);
   if (events.has('DOMContentLoaded')) events.get('DOMContentLoaded')();
+  if (events.has('load')) events.get('load')();
   const select = (value) => events.get(`${value}:click`)({ preventDefault() {} });
-  return { storage, document, choices, changes, select, text, attributes, link, skipLink, location: context.location, events };
+  return { storage, session, scrolls, document, choices, changes, select, text, attributes, link, skipLink, location: context.location, events };
 }
 
 test('browser preferences use the first supported language and regional variants', () => {
@@ -98,7 +116,10 @@ test('manual selection persists and opens the equivalent page', () => {
   const page = browser({ url: 'https://example.test/work/orthopedic-spine/?campaign=launch#contact' });
   page.select('es');
   assert.equal(page.storage.get('naranjo-language'), 'es');
-  assert.deepEqual(page.changes, [['assign', 'https://example.test/es/work/orthopedic-spine/?campaign=launch#contact']]);
+  assert.deepEqual(page.changes, [['assign', 'https://example.test/es/work/orthopedic-spine/?campaign=launch']]);
+  const destination = browser({ url: page.changes[0][1], sections: [{ id: 'contact', top: 100 }],
+    pendingScroll: page.session.get('naranjo-language-scroll') });
+  assert.equal(destination.location.href, 'https://example.test/es/work/orthopedic-spine/?campaign=launch#contact');
 });
 
 test('explicit Spanish visits do not change a saved English choice', () => {
@@ -111,8 +132,10 @@ test('explicit Spanish visits do not change a saved English choice', () => {
 test('blocked storage preserves an English selection across reloads and links', () => {
   const page = browser({ blocked: true, languages: ['es'], url: 'https://example.test/es/?campaign=launch#work' });
   page.select('en');
-  assert.deepEqual(page.changes, [['assign', 'https://example.test/?campaign=launch&_lang=en#work']]);
-  const english = browser({ blocked: true, languages: ['es'], url: page.changes[0][1] });
+  assert.deepEqual(page.changes, [['assign', 'https://example.test/?campaign=launch&_lang=en']]);
+  const english = browser({ blocked: true, languages: ['es'], url: page.changes[0][1], sections: [{ id: 'work', top: 100 }],
+    pendingScroll: page.session.get('naranjo-language-scroll') });
+  assert.equal(new URL(english.location.href).hash, '#work');
   assert.deepEqual(english.changes, []);
   assert.equal(english.choices[1].attributes.get('aria-current'), 'page');
   assert.equal(new URL(english.link.href).searchParams.get('_lang'), 'en');
@@ -173,4 +196,67 @@ test('404 skip links keep the current language after switching', () => {
   const destination = new URL(page.skipLink.href, page.location.href);
   assert.equal(destination.searchParams.get('_lang'), 'es');
   assert.equal(destination.hash, '#main-content');
+});
+
+
+test('language switching uses the actual section instead of a stale contact anchor', () => {
+  const page = browser({ url: 'https://example.test/?campaign=launch#contact', scrollY: 1400,
+    sections: [{ id: '', top: 100 }, { id: 'services', top: 1000 }, { id: 'contact', top: 3000 }] });
+  page.select('es');
+  assert.deepEqual(page.changes, [['assign', 'https://example.test/es/?campaign=launch']]);
+  assert.deepEqual(JSON.parse(page.session.get('naranjo-language-scroll')), { pathname: '/es/', section: 1, progress: 0.2 });
+  const destination = browser({ url: page.changes[0][1],
+    sections: [{ id: '', top: 100 }, { id: 'services', top: 1200 }, { id: 'contact', top: 3400 }],
+    pendingScroll: page.session.get('naranjo-language-scroll') });
+  assert.equal(new URL(destination.location.href).hash, '#services');
+  assert.equal(new URL(destination.choices[1].href).hash, '#services');
+  assert.deepEqual(destination.scrolls, [1640]);
+});
+
+test('switching at the top clears a stale anchor and restores the top', () => {
+  const page = browser({ url: 'https://example.test/#contact', sections: [{ id: '', top: 100 }] });
+  page.select('es');
+  assert.deepEqual(page.changes, [['assign', 'https://example.test/es/']]);
+  const destination = browser({ url: page.changes[0][1], sections: [{ id: '', top: 130 }],
+    pendingScroll: page.session.get('naranjo-language-scroll') });
+  assert.deepEqual(destination.scrolls, [0]);
+  assert.equal(destination.session.has('naranjo-language-scroll'), false);
+});
+
+test('restoration preserves progress within a section when translated heights change', () => {
+  const page = browser({ url: 'https://example.test/es/', scrollY: 1900,
+    sections: [{ id: '', top: 100 }, { id: 'work', top: 1000 }, { id: 'services', top: 4000 }] });
+  page.select('en');
+  const destination = browser({ url: page.changes[0][1], scrollY: 1100,
+    sections: [{ id: '', top: 120 }, { id: 'work', top: 1100 }, { id: 'services', top: 3100 }],
+    pendingScroll: page.session.get('naranjo-language-scroll') });
+  assert.deepEqual(destination.scrolls, [1700]);
+});
+
+test('case-study reading position follows heading order across languages', () => {
+  const page = browser({ url: 'https://example.test/work/orthopedic-spine/', scrollY: 1700,
+    sections: [{ id: '', top: 100, tagName: 'ARTICLE' }, { id: 'the-project', top: 1500, tagName: 'H2' }, { id: 'what-i-built', top: 2000, tagName: 'H2' }] });
+  page.select('es');
+  const destination = browser({ url: page.changes[0][1],
+    sections: [{ id: '', top: 100, tagName: 'ARTICLE' }, { id: 'el-proyecto', top: 1800, tagName: 'H2' }, { id: 'lo-que-construi', top: 2400, tagName: 'H2' }],
+    pendingScroll: page.session.get('naranjo-language-scroll') });
+  assert.deepEqual(destination.scrolls, [2040]);
+});
+
+test('blocked session storage falls back to the current section anchor', () => {
+  const page = browser({ blockedSession: true, url: 'https://example.test/#contact', scrollY: 1500,
+    sections: [{ id: '', top: 100 }, { id: 'services', top: 1000 }, { id: 'contact', top: 3000 }] });
+  page.select('es');
+  assert.deepEqual(page.changes, [['assign', 'https://example.test/es/#services']]);
+});
+
+test('unrelated, malformed and invalid scroll records do not move the page', () => {
+  for (const pendingScroll of ['invalid json', JSON.stringify({ pathname: '/es/other/', section: 0, progress: 0.5 }),
+    JSON.stringify({ pathname: '/es/', section: -2, progress: 0 }),
+    JSON.stringify({ pathname: '/es/', section: 0, progress: 2 }),
+    JSON.stringify({ pathname: '/es/', section: 99, progress: 0.5 })]) {
+    const page = browser({ url: 'https://example.test/es/', pendingScroll, sections: [{ id: '', top: 100 }] });
+    assert.deepEqual(page.scrolls, []);
+    assert.equal(page.session.has('naranjo-language-scroll'), false);
+  }
 });

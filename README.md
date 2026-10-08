@@ -34,6 +34,8 @@ On an unprefixed page, the site uses a valid saved choice first, otherwise the f
 
 Switching preserves the current page, query parameters, and section anchor. If storage is unavailable, the reserved `_lang=en` or `_lang=es` query parameter carries an explicit choice through reloads and internal links. Without JavaScript, ES/EN remains usable as ordinary links and content stays in the URL’s language.
 
+When switching in the current tab, the site uses the section actually being read instead of an outdated URL anchor. A one-use `naranjo-language-scroll` record in sessionStorage restores progress within that section after the translated page loads, including case-study headings whose translated IDs differ. If session storage is blocked, the site falls back to the current section’s anchor when available.
+
 The shared 404 response translates in place, preserving the requested URL and HTTP 404 status. Spanish paths show Spanish; other paths use the saved/browser preference. Recovery links, metadata, navigation, theme labels, and the language pill update together. Manual error-page choices use `_lang` to persist across reloads without changing the error path. Without JavaScript, the error page includes recovery links in both languages.
 
 When verifying languages, check fresh English/Spanish browser preferences, unsupported languages, saved and invalid choices, direct Spanish links, switching and persistence, reloads, case-study navigation, query parameters and anchors, blocked storage, and JavaScript disabled. Check both themes at 320, 640, 960, and 1440px, including keyboard focus, active segments, localized theme labels, and unknown English/Spanish routes.

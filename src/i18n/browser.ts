@@ -35,6 +35,47 @@ export function initializeLanguage(
 
   document.addEventListener('DOMContentLoaded', () => {
     const choices = document.querySelectorAll<HTMLAnchorElement>('[data-language-choice]');
+    const scrollStorageKey = 'naranjo-language-scroll';
+    const readingSections = () => Array.from(document.querySelectorAll<HTMLElement>('main > section, main > article, main .prose h2'));
+    const captureScroll = () => {
+      const sections = readingSections();
+      const section = sections.findLastIndex((element) => element.getBoundingClientRect().top <= 1);
+      if (section === -1) return { section, progress: window.scrollY };
+      const start = sections[section].getBoundingClientRect().top + window.scrollY;
+      const nextSection = sections[section + 1];
+      const end = nextSection ? nextSection.getBoundingClientRect().top + window.scrollY : document.documentElement.scrollHeight;
+      return { section, progress: Math.max(0, Math.min(1, (window.scrollY - start) / Math.max(1, end - start))) };
+    };
+    try {
+      const pending = sessionStorage.getItem(scrollStorageKey);
+      sessionStorage.removeItem(scrollStorageKey);
+      const position = pending ? JSON.parse(pending) : null;
+      if (position?.pathname === location.pathname && Number.isInteger(position.section) && position.section >= -1
+        && Number.isFinite(position.progress) && position.progress >= 0 && (position.section === -1 || position.progress <= 1)) {
+        // Wait for images with reserved dimensions to settle before restoring progress.
+        window.addEventListener('load', () => window.requestAnimationFrame(() => {
+          const sections = readingSections();
+          if (position.section >= sections.length) return;
+          let top = position.progress;
+          if (position.section >= 0) {
+            const start = sections[position.section].getBoundingClientRect().top + window.scrollY;
+            const nextSection = sections[position.section + 1];
+            const end = nextSection ? nextSection.getBoundingClientRect().top + window.scrollY : document.documentElement.scrollHeight;
+            top = start + position.progress * Math.max(1, end - start);
+          }
+          window.scrollTo({ top, behavior: 'instant' });
+          const section = sections[position.section];
+          if (section?.tagName === 'SECTION' && section.id) {
+            const destination = new URL(location.href);
+            destination.hash = section.id;
+            history.replaceState(null, '', destination.href);
+            updateChoiceLinks();
+          }
+        }), { once: true });
+      }
+    } catch {
+      // Section anchors still work when session storage is blocked or invalid.
+    }
     const updateControls = () => {
       choices.forEach((choice) => {
         if (choice.dataset.languageChoice === locale) choice.setAttribute('aria-current', 'page');
@@ -114,7 +155,19 @@ export function initializeLanguage(
       destination.pathname = tools.localePath(destination.pathname, locale);
       destination.searchParams.delete('_lang');
       if (!storageAvailable) destination.searchParams.set('_lang', choice);
-      if (destination.href !== location.href) location.assign(destination.href);
+      if (destination.href !== location.href) {
+        const position = captureScroll();
+        const section = readingSections()[position.section];
+        destination.hash = section?.tagName === 'SECTION' ? section.id : '';
+        try {
+          sessionStorage.setItem(scrollStorageKey, JSON.stringify({ ...position, pathname: destination.pathname }));
+          // Native fragment scrolling can run after restoration in Safari.
+          destination.hash = '';
+        } catch {
+          // Navigate to the current section even when the precise position cannot be saved.
+        }
+        location.assign(destination.href);
+      }
       else {
         updateControls();
       }
