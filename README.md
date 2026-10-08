@@ -72,11 +72,17 @@ Confirm CI passes on a pull request and Vercel supplies a preview URL. After pro
 
 The clinic artwork is a labeled illustration, not a screenshot. Public project descriptions contain no patient data or private repository links.
 
+The Orthopedic Spine homepage section and case study share `ClinicOverview.astro`, a light artwork panel with static website, booking, and dashboard previews. Their controls are decorative and their data is synthetic. `ClinicCapabilities.astro` presents the four existing delivered capabilities on both pages. Project-specific styles live in `src/styles/clinic.css`; the surrounding content follows the selected theme.
+
+Verify both project views in light and dark at 320, 640, 960, 1100, and 1440px. Check preview stacking, image loading, readable labels, heading order, focus, internal navigation, reduced motion, and no-JavaScript rendering alongside `npm run check` and `npm run build`.
+
 ## Brand assets
 
 `public/favicon.svg` is the folded N mark used in the header, footer, browser icon, and hero illustration. The wordmark remains live text.
 
 The hero artwork is stored in `src/assets/engineering-workshop.png` and rendered through Astro’s `Image` component as responsive WebP assets. The SVG mark is overlaid on its central card so the logo stays consistent. Its generation prompt is preserved in `src/assets/engineering-workshop.prompt.txt`; the image was created with the built-in image generation tool using the supplied brand and illustration references.
+
+The decorative spine artwork is stored in `src/assets/orthopedic-spine.png`, with its generation prompt in `src/assets/orthopedic-spine.prompt.txt`. It was created with the built-in image generation tool using the supplied project-section reference, then rendered as responsive WebP assets through Astro’s `Image` component. It is marketing artwork, not a diagnostic medical diagram. Text, preview interfaces, labels, and icons are rendered in HTML/CSS and SVG.
 
 ## Before publication
 

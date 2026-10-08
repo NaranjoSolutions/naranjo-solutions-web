@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Arrow from '../components/Arrow.astro';
 import ClinicOverview from '../components/ClinicOverview.astro';
+import ClinicCapabilities from '../components/ClinicCapabilities.astro';
 import Contact from '../components/Contact.astro';
 import EngineeringIllustration from '../components/EngineeringIllustration.astro';
 import { siteConfig } from '../config/site';
@@ -47,17 +48,17 @@ const featuredWork = await getCollection('work', (project) => project.data.featu
       <p>A closer look at how a business need<br class="desktop-break" /> becomes a working software system.</p>
     </div>
     {featuredWork.map((project) => (
-      <article class="featured-project">
+      <article class:list={['featured-project', { 'orthopedic-project': project.id === 'orthopedic-spine' }]}>
         {project.id === 'orthopedic-spine' && <ClinicOverview />}
         <div class="project-copy">
           <p class="eyebrow">{project.data.category}</p>
           <h3><a href={`/work/${project.id}/`}>{project.data.title}</a></h3>
           <p class="project-summary">{project.data.summary}</p>
-          <ul class="project-capabilities" aria-label="Delivered capabilities">
+          {project.id === 'orthopedic-spine' ? <ClinicCapabilities capabilities={project.data.capabilities} /> : <ul class="project-capabilities" aria-label="Delivered capabilities">
             {project.data.capabilities.map((capability) => <li>{capability}</li>)}
-          </ul>
+          </ul>}
           <p class="stack-line">{project.data.stack.join(' / ')}</p>
-          <a class="text-link" href={`/work/${project.id}/`}>Inside the project<Arrow /></a>
+          <a class:list={project.id === 'orthopedic-spine' ? ['button', 'button-blue', 'project-button'] : ['text-link']} href={`/work/${project.id}/`}>Inside the project<Arrow /></a>
         </div>
       </article>
     ))}

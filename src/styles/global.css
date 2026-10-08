@@ -111,21 +111,6 @@ main:focus { outline: none; }
 .muted-heading { color: var(--muted); }
 .section-intro > p { max-width: 25rem; color: var(--muted); font-size: 0.94rem; }
 .featured-project { display: grid; gap: 2rem; }
-.clinic-art { position: relative; overflow: hidden; background: #e9eefb; padding: 1.25rem; color: var(--blue-fill); color-scheme: light; }
-.clinic-art-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-.clinic-art-heading .eyebrow { max-width: 10rem; font-size: 0.54rem; }
-.diagram-label { padding: 0.2rem 0.45rem; border: 1px solid #acbae9; background: #fff9; font-family: var(--mono); font-size: 0.54rem; white-space: nowrap; }
-.clinic-art-body { display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; min-height: 17rem; gap: 0.5rem; }
-.clinic-art-title { display: flex; flex-direction: column; gap: 0.8rem; font-size: clamp(1.7rem, 4.6vw, 2.8rem); font-weight: 600; line-height: 1.06; letter-spacing: -0.055em; }
-.clinic-cross { display: block; font-size: 3.7rem; font-weight: 300; line-height: 0.8; letter-spacing: 0; }
-.clinic-art-subtitle { display: block; max-width: 10rem; margin-top: 0.9rem; font-size: 0.65rem; font-weight: 400; letter-spacing: 0; line-height: 1.5; }
-.spine-illustration { width: 100%; height: auto; max-height: 20rem; object-fit: contain; }
-.clinic-system { display: grid; grid-template-columns: 1fr; gap: 0.45rem; list-style: none; }
-.clinic-system li { display: flex; align-items: center; gap: 0.8rem; padding: 0.65rem 0.8rem; background: #fff; font-size: 0.72rem; font-weight: 550; }
-.system-symbol { font-size: 1.2rem; line-height: 1; }
-.clinic-backend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem 1rem; padding-top: 0.8rem; font-family: var(--mono); font-size: 0.56rem; }
-.clinic-backend strong { font-weight: 500; }
-.clinic-overview figcaption { padding-top: 0.65rem; font-family: var(--mono); font-size: 0.58rem; color: var(--muted); }
 .project-copy { padding-top: 0.25rem; }
 .project-copy > .eyebrow { color: var(--muted); }
 .project-copy h3 { margin-top: 0.8rem; font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1.1; font-weight: 650; letter-spacing: -0.055em; }
@@ -195,15 +180,6 @@ main:focus { outline: none; }
   .capability-strip-inner { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; font-size: 0.6rem; }
   .strip-cross { display: block; color: #c7d1ff; font-size: 1rem; }
   .section-pad { padding-block: 5.5rem; }
-  .clinic-art { padding: 2rem; }
-  .clinic-art-body { min-height: 21rem; }
-  .clinic-art-title { font-size: 2.8rem; }
-  .clinic-system { grid-template-columns: repeat(3, 1fr); }
-  .clinic-system li { flex-direction: column; align-items: flex-start; gap: 0.65rem; padding: 0.85rem; }
-  .clinic-art-heading .eyebrow { max-width: none; font-size: 0.59rem; }
-  .diagram-label { font-size: 0.6rem; }
-  .clinic-art-subtitle { font-size: 0.74rem; max-width: none; }
-  .clinic-overview figcaption { font-size: 0.62rem; }
   .service-row { grid-template-columns: 1fr 1.3fr; gap: 1.2rem 2rem; }
   .service-row ul { grid-column: 2; }
   .footer-credit { width: auto; text-align: right; }
@@ -231,10 +207,6 @@ main:focus { outline: none; }
   .section-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem; margin-bottom: 3.5rem; }
   .section-intro > p { padding-bottom: 0.25rem; }
   .featured-project { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 3.5rem; align-items: center; }
-  .clinic-art-body { min-height: 23rem; }
-  .spine-illustration { max-height: 22rem; }
-  .clinic-art-title { font-size: clamp(2rem, 3.2vw, 2.8rem); }
-  .clinic-system li { font-size: 0.63rem; }
   .project-copy h3 { font-size: clamp(2rem, 3vw, 2.6rem); }
   .service-row { grid-template-columns: 1fr 1.2fr 0.7fr; gap: 2rem; padding-block: 2rem; }
   .service-title h3 { font-size: 1.25rem; }
@@ -248,12 +220,6 @@ main:focus { outline: none; }
   .site-footer { align-items: center; padding-block: 2.5rem; }
   .case-study { padding-block: 3rem 6rem; }
   .case-header { padding-bottom: 3.5rem; }
-  .case-study > .clinic-overview .clinic-art { padding-inline: 3.5rem; }
-  .case-study .clinic-art-body { grid-template-columns: 1fr 1fr; min-height: 26rem; }
-  .case-study .clinic-art-title { flex-direction: row; align-items: flex-start; gap: 2rem; font-size: 4rem; }
-  .case-study .clinic-cross { font-size: 6rem; }
-  .case-study .spine-illustration { max-height: 26rem; }
-  .case-study .clinic-system li { flex-direction: row; align-items: center; gap: 1rem; font-size: 0.88rem; padding: 1.2rem; }
   .case-details { grid-template-columns: 1fr 2fr; gap: 4rem; margin-top: 4.5rem; }
   .case-facts { grid-template-columns: 1fr; gap: 2rem; }
   .case-privacy { grid-column: auto; }

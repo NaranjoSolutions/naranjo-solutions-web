@@ -1,22 +1,73 @@
+---
+import { Image } from 'astro:assets';
+import spineIllustration from '../assets/orthopedic-spine.png';
+import ClinicIcon from './ClinicIcon.astro';
+import '../styles/clinic.css';
+
+const calendarDays = Array.from({ length: 35 }, (_, calendarIndex) => {
+  const day = calendarIndex - 2;
+  return day >= 1 && day <= 30 ? day : '';
+});
+const sampleAppointments = [
+  { reference: 'Booking 01', status: 'Scheduled' },
+  { reference: 'Booking 02', status: 'Confirmed' },
+  { reference: 'Booking 03', status: 'Pending' },
+];
+---
+
 <figure class="clinic-overview">
   <div class="clinic-art">
     <div class="clinic-art-heading">
       <span class="eyebrow">Healthcare / Connected systems</span>
-      <span class="diagram-label">Interface overview</span>
+      <span class="diagram-label">Platform overview</span>
     </div>
     <div class="clinic-art-body">
-      <div class="clinic-art-title">
-        <span class="clinic-cross" aria-hidden="true">+</span>
-        <span>Orthopedic<br />Spine<span class="clinic-art-subtitle">A connected clinic platform</span></span>
+      <div class="clinic-art-copy">
+        <p class="clinic-art-title">Orthopedic<br />Spine</p>
+        <p class="clinic-art-subtitle">A connected clinic platform</p>
       </div>
-      <img class="spine-illustration" src="/images/spine-study.svg" width="260" height="420" alt="" loading="lazy" decoding="async" />
+      <div class="clinic-spine-scene" aria-hidden="true">
+        <span class="spine-orbit spine-orbit-outer"></span>
+        <span class="spine-orbit spine-orbit-inner"></span>
+        <Image class="spine-illustration" src={spineIllustration} alt="" widths={[240, 480, 720]} sizes="(min-width: 640px) 400px, 240px" format="webp" quality={85} loading="lazy" />
+        <span class="spine-callout"><span class="callout-dot"></span><strong>One connected platform</strong><span>Website · Booking · Admin</span></span>
+      </div>
     </div>
-    <ol class="clinic-system" aria-label="Clinic platform components">
-      <li><span class="system-symbol" aria-hidden="true">↗</span><span>Public website</span></li>
-      <li><span class="system-symbol" aria-hidden="true">＋</span><span>Online booking</span></li>
-      <li><span class="system-symbol" aria-hidden="true">⌘</span><span>Admin dashboard</span></li>
-    </ol>
-    <div class="clinic-backend"><span>Connected by</span><strong>FastAPI + PostgreSQL</strong></div>
+
+    <div class="clinic-previews">
+      <div class="clinic-preview">
+        <div class="interface-preview website-preview" aria-hidden="true">
+          <div class="browser-bar"><i></i><i></i><i></i><span>orthopedic spine</span></div>
+          <div class="website-preview-nav"><span>Orthopedic Spine</span><span>Our clinic</span></div>
+          <div class="website-preview-hero">
+            <div><span class="preview-eyebrow">Spine care</span><strong>Connected<br />to your care.</strong><span class="preview-copy-line"></span><span class="preview-copy-line preview-copy-short"></span><span class="preview-action">Explore the clinic ↗</span></div>
+            <Image src={spineIllustration} alt="" widths={[120, 240]} sizes="120px" format="webp" quality={80} loading="lazy" />
+          </div>
+        </div>
+        <div class="preview-caption"><span class="preview-caption-icon"><ClinicIcon kind="website" /></span><div><p class="preview-title">Public website</p><p>The clinic’s online presence.</p></div></div>
+      </div>
+
+      <div class="clinic-preview">
+        <div class="interface-preview booking-preview" aria-hidden="true">
+          <strong>Book an appointment</strong>
+          <div class="booking-preview-body">
+            <div class="preview-calendar"><div class="calendar-heading"><span>‹</span><span>Sample month</span><span>›</span></div><div class="calendar-grid">{['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((weekday) => <span class="calendar-weekday">{weekday}</span>)}{calendarDays.map((day) => <span class:list={{ 'calendar-selected': day === 14 }}>{day}</span>)}</div></div>
+            <div class="preview-times"><span>09:00</span><span class="preview-time-selected">10:30</span><span>11:00</span><span>14:00</span></div>
+          </div>
+          <span class="booking-preview-note">Choose a day. Find your time.</span>
+        </div>
+        <div class="preview-caption"><span class="preview-caption-icon"><ClinicIcon kind="booking" /></span><div><p class="preview-title">Online booking</p><p>A connected booking experience.</p></div></div>
+      </div>
+
+      <div class="clinic-preview">
+        <div class="interface-preview dashboard-preview" aria-hidden="true">
+          <div class="dashboard-preview-nav"><span class="dashboard-wordmark">OS</span><span class="dashboard-nav-active">Overview</span><span>Bookings</span><span>Clinic</span><span>Settings</span></div>
+          <div class="dashboard-preview-main"><strong>Clinic overview</strong><div class="dashboard-search">Find a booking…</div><div class="dashboard-table-heading"><span>Reference</span><span>Status</span></div>{sampleAppointments.map((appointment) => <div class="dashboard-table-row"><span>{appointment.reference}</span><span class="dashboard-status">{appointment.status}</span></div>)}<div class="dashboard-bars"><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+        </div>
+        <div class="preview-caption"><span class="preview-caption-icon"><ClinicIcon kind="dashboard" /></span><div><p class="preview-title">Admin dashboard</p><p>A dedicated administration interface.</p></div></div>
+      </div>
+    </div>
+    <div class="clinic-backend"><span>Connected by one integrated platform</span><strong>React / FastAPI / PostgreSQL</strong></div>
   </div>
   <figcaption>Illustrated system overview · Not a product screenshot</figcaption>
 </figure>
