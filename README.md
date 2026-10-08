@@ -1,6 +1,6 @@
 # Naranjo Solutions
 
-An English portfolio and consulting website for Alonso Villanueva, Senior Software Engineer & Team Lead. Built with Astro, TypeScript, and plain CSS, with a featured Orthopedic Spine clinic platform case study.
+An English and Spanish portfolio and consulting website for Alonso Villanueva, Senior Software Engineer & Team Lead. Built with Astro, TypeScript, and plain CSS, with a featured Orthopedic Spine clinic platform case study.
 
 ## Local development
 
@@ -16,6 +16,7 @@ The local website is served at `http://127.0.0.1:4321`. No external services or 
 ## Verification
 
 ```sh
+npm run test:i18n
 npm run check
 npm run build
 npm run preview
@@ -23,7 +24,19 @@ npm run preview
 
 `check` validates Astro and TypeScript. `build` produces static HTML and assets in `dist/`. `preview` serves that production output locally.
 
-There is no dedicated test runner, formatter, or lint configuration. Verify the homepage, case study, 404 page, mobile layouts, keyboard navigation, and reduced-motion behavior in a browser alongside the check and build commands.
+`test:i18n` uses Node’s built-in test runner to validate language resolution, navigation, persistence, blocked storage, and 404 localization. There is no browser test runner, formatter, or lint configuration. Verify both languages on the homepage, case study, and 404 page, including mobile layouts, keyboard navigation, and reduced-motion behavior alongside the check and build commands.
+
+## Language preference
+
+English pages use `/` and `/work/<projectId>/`; Spanish equivalents use `/es/` and `/es/work/<projectId>/`. The header’s ES/EN pill highlights the current language. Selecting a segment saves `en` or `es` under `naranjo-language` in localStorage. The browser preference applies until the visitor selects ES or EN; clearing the saved preference restores automatic selection.
+
+On an unprefixed page, the site uses a valid saved choice first, otherwise the first English or Spanish entry in `navigator.languages`, including regional variants such as `es-CR`. Unsupported preferences fall back to English. Explicit `/es/` visits always show Spanish and do not change the saved preference. Automatic selection uses an early browser redirect; the static server itself serves the URL’s language.
+
+Switching preserves the current page, query parameters, and section anchor. If storage is unavailable, the reserved `_lang=en` or `_lang=es` query parameter carries an explicit choice through reloads and internal links. Without JavaScript, ES/EN remains usable as ordinary links and content stays in the URL’s language.
+
+The shared 404 response translates in place, preserving the requested URL and HTTP 404 status. Spanish paths show Spanish; other paths use the saved/browser preference. Recovery links, metadata, navigation, theme labels, and the language pill update together. Manual error-page choices use `_lang` to persist across reloads without changing the error path. Without JavaScript, the error page includes recovery links in both languages.
+
+When verifying languages, check fresh English/Spanish browser preferences, unsupported languages, saved and invalid choices, direct Spanish links, switching and persistence, reloads, case-study navigation, query parameters and anchors, blocked storage, and JavaScript disabled. Check both themes at 320, 640, 960, and 1440px, including keyboard focus, active segments, localized theme labels, and unknown English/Spanish routes.
 
 ## Theme preference
 
@@ -65,8 +78,8 @@ Confirm CI passes on a pull request and Vercel supplies a preview URL. After pro
 
 ## Updating content
 
-- Edit brand, biography, services, and contact settings in `src/config/site.ts`.
-- Add case studies as Markdown files in `src/content/work/`; their filenames become `/work/<filename>/` routes.
+- Edit shared brand, owner name, and contact details in `src/config/site.ts`. Edit translated UI copy, biography, services, and labels in `src/i18n/translations.ts`; Spanish uses neutral Latin American wording.
+- Add paired English and Spanish Markdown case studies in `src/content/work/` and `src/content/work/es/`. Each needs a `locale` (`en` or `es`) and the same stable `projectId`; that identity becomes `/work/<projectId>/` and `/es/work/<projectId>/`. The build rejects missing or duplicate language versions. Capabilities use `{ id, label }` entries: preserve IDs between translations and translate labels. The clinic IDs are `website`, `booking`, `dashboard`, and `database`.
 - Set `featured: true` to include a case study on the homepage. The existing clinic illustration appears only for Orthopedic Spine; add project-specific artwork to the homepage and case-study template when adding other projects.
 - Edit design tokens and responsive styles in `src/styles/global.css`.
 

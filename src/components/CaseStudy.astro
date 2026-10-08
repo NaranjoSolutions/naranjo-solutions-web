@@ -1,0 +1,45 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Arrow from './Arrow.astro';
+import ClinicOverview from './ClinicOverview.astro';
+import ClinicCapabilities from './ClinicCapabilities.astro';
+import Contact from './Contact.astro';
+import { getSiteConfig } from '../config/site';
+import { localePath } from '../i18n/locale';
+import { translations } from '../i18n/translations';
+
+interface Props {
+  project: CollectionEntry<'work'>;
+}
+
+const { project } = Astro.props;
+const locale = project.data.locale;
+const siteConfig = getSiteConfig(locale);
+const copy = translations[locale].project;
+const { Content } = await render(project);
+const isOrthopedicSpine = project.data.projectId === 'orthopedic-spine';
+---
+
+<BaseLayout locale={locale} title={`${project.data.title} — ${siteConfig.brand}`} description={project.data.description}>
+  <article class:list={['case-study', 'container', { 'orthopedic-case': isOrthopedicSpine }]}>
+    <header class="case-header">
+      <a class="text-link back-link" href={`${localePath('/', locale)}#work`}><Arrow />{copy.back}</a>
+      <p class="eyebrow">{project.data.category}</p>
+      <h1>{project.data.title}<span class="accent-period">.</span></h1>
+      <p class="case-summary">{project.data.summary}</p>
+      {isOrthopedicSpine && <ul class="case-technology" aria-label={copy.technology}>{project.data.stack.map((technology) => <li>{technology}</li>)}</ul>}
+    </header>
+    {project.data.projectId === 'orthopedic-spine' && <ClinicOverview locale={locale} />}
+    <div class="case-details">
+      {isOrthopedicSpine && <div class="prose"><Content /></div>}
+      <div class="case-facts" role="group" aria-label={copy.details}>
+        <div><h2 class="eyebrow">{copy.capabilities}</h2>{isOrthopedicSpine ? <ClinicCapabilities locale={locale} capabilities={project.data.capabilities} /> : <ul>{project.data.capabilities.map((capability) => <li>{capability.label}</li>)}</ul>}</div>
+        {!isOrthopedicSpine && <div><h2 class="eyebrow">{copy.technologyHeading}</h2><ul>{project.data.stack.map((technology) => <li>{technology}</li>)}</ul></div>}
+        <p class="case-privacy">{copy.privacy[0]}<br />{copy.privacy[1]}</p>
+      </div>
+      {!isOrthopedicSpine && <div class="prose"><Content /></div>}
+    </div>
+  </article>
+  <Contact locale={locale} />
+</BaseLayout>

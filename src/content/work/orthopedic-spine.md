@@ -1,14 +1,20 @@
 ---
+locale: en
+projectId: orthopedic-spine
 title: Orthopedic Spine
 description: A clinic platform combining a React website, online booking, and an admin dashboard with a FastAPI and PostgreSQL backend.
 category: Healthcare · Clinic platform
 summary: A public website, online booking, and an admin dashboard—connected through one clinic platform.
 featured: true
 capabilities:
-  - Public-facing website
-  - Online booking
-  - Admin dashboard
-  - Backend API & database
+  - id: website
+    label: Public-facing website
+  - id: booking
+    label: Online booking
+  - id: dashboard
+    label: Admin dashboard
+  - id: database
+    label: Backend API & database
 stack:
   - React
   - FastAPI
