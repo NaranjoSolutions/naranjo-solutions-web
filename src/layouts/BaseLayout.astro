@@ -30,7 +30,53 @@ const navigation = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#173ACB" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1426" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      (() => {
+        const storageKey = 'naranjo-theme';
+        const deviceTheme = window.matchMedia('(prefers-color-scheme: dark)');
+        let preference = 'system';
+
+        try {
+          const savedPreference = localStorage.getItem(storageKey);
+          if (savedPreference === 'light' || savedPreference === 'dark') {
+            preference = savedPreference;
+          }
+        } catch {
+          // Storage can be blocked while the rest of the page remains usable.
+        }
+
+        const applyTheme = () => {
+          const theme = preference === 'system' ? (deviceTheme.matches ? 'dark' : 'light') : preference;
+          document.documentElement.dataset.theme = theme;
+          document.querySelectorAll('meta[name="theme-color"]').forEach((metadata) => {
+            metadata.content = theme === 'dark' ? '#0d1426' : '#ffffff';
+          });
+        };
+
+        applyTheme();
+        deviceTheme.addEventListener('change', () => {
+          if (preference === 'system') applyTheme();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const selector = document.getElementById('theme-preference');
+          selector.value = preference;
+          selector.addEventListener('change', () => {
+            preference = selector.value;
+            applyTheme();
+            try {
+              if (preference === 'system') localStorage.removeItem(storageKey);
+              else localStorage.setItem(storageKey, preference);
+            } catch {
+              // Keep the selection active for this page when it cannot be saved.
+            }
+          });
+          selector.parentElement.hidden = false;
+        }, { once: true });
+      })();
+    </script>
     {noindex && <meta name="robots" content="noindex, follow" />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:type" content="website" />
@@ -48,6 +94,14 @@ const navigation = [
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header container">
       <Brand />
+      <label class="theme-control" hidden>
+        <span>Theme</span>
+        <select id="theme-preference" name="theme">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
       <nav class="site-nav" aria-label="Main navigation">
         {navigation.map((item) => (
           <a href={`${isHome ? '' : '/'}#${item.id}`}>{item.label}</a>
