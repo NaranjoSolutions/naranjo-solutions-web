@@ -1,28 +1,35 @@
 ---
 import Arrow from './Arrow.astro';
-import { siteConfig } from '../config/site';
+import { getSiteConfig } from '../config/site';
+import type { Locale } from '../i18n/locale';
+import { translations } from '../i18n/translations';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const siteConfig = getSiteConfig(locale);
+const copy = translations[locale].contact;
 ---
 
 <section class="contact-section" id="contact" aria-labelledby="contact-heading">
   <div class="container contact-grid">
     <div>
-      <p class="eyebrow">Let’s make it happen</p>
-      <h2 id="contact-heading">A good idea.<br />A solid next step.</h2>
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h2 id="contact-heading">{copy.heading[0]}<br />{copy.heading[1]}</h2>
     </div>
     <div class="contact-copy">
-      <p>Have a website, a product, or a workflow that needs a better way forward? Let’s talk about what you want to build.</p>
+      <p>{copy.intro}</p>
       <a class="button button-white" href={siteConfig.contact.url}>{siteConfig.contact.label}<Arrow diagonal /></a>
       <dl class="contact-methods">
         <div>
-          <dt>Email</dt>
+          <dt>{copy.email}</dt>
           <dd><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></dd>
         </div>
         <div>
-          <dt>Phone</dt>
+          <dt>{copy.phone}</dt>
           <dd><a href={`tel:${siteConfig.contact.phone.number}`}>{siteConfig.contact.phone.display}</a></dd>
         </div>
       </dl>
-      <p class="contact-destination">Continue to my personal site<br /><a href={siteConfig.contact.url}>{siteConfig.contact.display}<span aria-hidden="true"> ↗</span></a></p>
+      <p class="contact-destination">{copy.destination}<br /><a href={siteConfig.contact.url}>{siteConfig.contact.display}<span aria-hidden="true"> ↗</span></a></p>
     </div>
   </div>
 </section>

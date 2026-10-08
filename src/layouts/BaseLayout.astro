@@ -1,37 +1,51 @@
 ---
 import Brand from '../components/Brand.astro';
 import Arrow from '../components/Arrow.astro';
-import { siteConfig } from '../config/site';
+import { getSiteConfig } from '../config/site';
+import { createLanguageTools, localePath, type Locale } from '../i18n/locale';
+import { initializeLanguage } from '../i18n/browser';
+import { translations } from '../i18n/translations';
 import '../styles/global.css';
 
 interface Props {
+  locale?: Locale;
   title?: string;
   description?: string;
   noindex?: boolean;
 }
 
-const {
-  title = `${siteConfig.brand} — Software development & consulting`,
-  description = siteConfig.description,
-  noindex = false,
-} = Astro.props;
-const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
-const isHome = Astro.url.pathname === '/';
+const { locale = 'en', noindex = false } = Astro.props;
+const siteConfig = getSiteConfig(locale);
+const copy = translations[locale].layout;
+const title = Astro.props.title ?? `${siteConfig.brand} — ${copy.title}`;
+const description = Astro.props.description ?? siteConfig.description;
+const canonicalUrl = !noindex && Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const isHome = Astro.url.pathname === localePath('/', locale);
 const navigation = [
-  { label: 'Work', id: 'work' },
-  { label: 'Services', id: 'services' },
-  { label: 'About', id: 'about' },
+  { label: copy.work, id: 'work' },
+  { label: copy.services, id: 'services' },
+  { label: copy.about, id: 'about' },
 ];
+const errorMessages = noindex ? Object.fromEntries(['en', 'es'].map((language) => {
+  const messages = translations[language as Locale];
+  return [language, {
+    layout: { ...messages.layout, home: `${siteConfig.brand} — ${messages.layout.home}` },
+    error: { ...messages.error, title: `${messages.error.title} — ${siteConfig.brand}` },
+  }];
+})) : null;
+// Inline the same functions tested by Node so detection runs before content paints.
+const languageScript = `(${initializeLanguage.toString()})((${createLanguageTools.toString()})(), ${JSON.stringify(errorMessages).replace(/</g, '\\u003c')});`;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content={description} />
+    <meta name="description" content={description} data-language-content={noindex ? 'error.description' : undefined} />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0d1426" media="(prefers-color-scheme: dark)" />
+    <script is:inline set:html={languageScript} />
     <script is:inline>
       (() => {
         const storageKey = 'naranjo-theme';
@@ -55,13 +69,14 @@ const navigation = [
           });
           const toggle = document.getElementById('theme-toggle');
           if (toggle) {
-            const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            const label = theme === 'dark' ? toggle.dataset.lightLabel : toggle.dataset.darkLabel;
             toggle.setAttribute('aria-label', label);
             toggle.title = label;
           }
         };
 
         applyTheme();
+        document.addEventListener('naranjo:language', applyTheme);
         deviceTheme.addEventListener('change', () => {
           if (preference === 'system') applyTheme();
         });
@@ -84,42 +99,54 @@ const navigation = [
     </script>
     {noindex && <meta name="robots" content="noindex, follow" />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {Astro.site && !noindex && (['en', 'es'] as const).map((language) => (
+      <link rel="alternate" hreflang={language} href={new URL(localePath(Astro.url.pathname, language), Astro.site)} />
+    ))}
+    {canonicalUrl && <link rel="alternate" hreflang="x-default" href={new URL(localePath(Astro.url.pathname, 'en'), Astro.site)} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteConfig.brand} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={title} data-language-content={noindex ? 'error.title' : undefined} />
+    <meta property="og:description" content={description} data-language-content={noindex ? 'error.description' : undefined} />
     {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={title} data-language-content={noindex ? 'error.title' : undefined} />
+    <meta name="twitter:description" content={description} data-language-content={noindex ? 'error.description' : undefined} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
+    <title data-language-text={noindex ? 'error.title' : undefined}>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content" data-language-text={noindex ? 'layout.skip' : undefined}>{copy.skip}</a>
     <header class="site-header container">
-      <Brand />
-      <nav class="site-nav" aria-label="Main navigation">
+      <Brand locale={locale} localizeError={noindex} />
+      <nav class="site-nav" aria-label={copy.navigation} data-language-aria={noindex ? 'layout.navigation' : undefined}>
         {navigation.map((item) => (
-          <a href={`${isHome ? '' : '/'}#${item.id}`}>{item.label}</a>
+          <a href={`${isHome ? '' : localePath('/', locale)}#${item.id}`} data-language-link={noindex ? `/#${item.id}` : undefined} data-language-text={noindex ? `layout.${item.id}` : undefined}>{item.label}</a>
         ))}
-        <a class="nav-contact" href={isHome ? '#contact' : '/#contact'}>Contact<Arrow diagonal /></a>
+        <a class="nav-contact" href={isHome ? '#contact' : `${localePath('/', locale)}#contact`} data-language-link={noindex ? '/#contact' : undefined}><span data-language-text={noindex ? 'layout.contact' : undefined}>{copy.contact}</span><Arrow diagonal /></a>
       </nav>
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden>
-        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
-        </svg>
-        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
-        </svg>
-      </button>
+      <div class="header-controls">
+        <div class="language-control">
+          <div class="language-toggle" role="group" aria-label={copy.language} data-language-aria={noindex ? 'layout.language' : undefined}>
+            <a href={`${localePath(noindex ? '/' : Astro.url.pathname, 'es')}?_lang=es`} data-language-choice="es" lang="es" aria-label="Español" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+            <a href={`${localePath(noindex ? '/' : Astro.url.pathname, 'en')}?_lang=en`} data-language-choice="en" lang="en" aria-label="English" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+          </div>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label={copy.dark} title={copy.dark} data-light-label={copy.light} data-dark-label={copy.dark} data-language-light={noindex ? 'layout.light' : undefined} data-language-dark={noindex ? 'layout.dark' : undefined} hidden>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
+          </svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+          </svg>
+        </button>
+      </div>
     </header>
     <main id="main-content" tabindex="-1"><slot /></main>
     <footer class="site-footer container">
-      <Brand />
-      <p>Independent engineering.<br />Built with purpose.</p>
-      <div class="footer-credit"><span>© {new Date().getFullYear()} {siteConfig.brand}</span><span>By {siteConfig.owner.name}</span></div>
+      <Brand locale={locale} localizeError={noindex} />
+      <p><span data-language-text={noindex ? 'layout.footerFirst' : undefined}>{copy.footerFirst}</span><br /><span data-language-text={noindex ? 'layout.footerSecond' : undefined}>{copy.footerSecond}</span></p>
+      <div class="footer-credit"><span>© {new Date().getFullYear()} {siteConfig.brand}</span><span><span data-language-text={noindex ? 'layout.by' : undefined}>{copy.by}</span> {siteConfig.owner.name}</span></div>
     </footer>
   </body>
 </html>

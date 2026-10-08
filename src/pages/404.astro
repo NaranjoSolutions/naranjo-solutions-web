@@ -2,13 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Arrow from '../components/Arrow.astro';
 import { siteConfig } from '../config/site';
+import { translations } from '../i18n/translations';
+
+const copy = translations.en.error;
 ---
 
-<BaseLayout title={`Page not found — ${siteConfig.brand}`} noindex>
+<BaseLayout title={`${copy.title} — ${siteConfig.brand}`} description={copy.description} noindex>
   <section class="not-found container" aria-labelledby="not-found-heading">
-    <p class="eyebrow">404 / A small detour</p>
-    <h1 id="not-found-heading">Let’s get you<br />back on track<span class="accent-period">.</span></h1>
-    <p>This page couldn’t be found. Explore my work or head back to the homepage.</p>
-    <div class="not-found-actions"><a class="button button-blue" href="/">Back to home<Arrow /></a><a class="text-link" href="/#work">See selected work<Arrow /></a></div>
+    <p class="eyebrow" data-language-text="error.eyebrow">{copy.eyebrow}</p>
+    <h1 id="not-found-heading"><span data-language-text="error.headingFirst">{copy.headingFirst}</span><br /><span data-language-text="error.headingSecond">{copy.headingSecond}</span><span class="accent-period">.</span></h1>
+    <p data-language-text="error.description">{copy.description}</p>
+    <div class="not-found-actions"><a class="button button-blue" href="/" data-language-link="/"><span data-language-text="error.home">{copy.home}</span><Arrow /></a><a class="text-link" href="/#work" data-language-link="/#work"><span data-language-text="error.work">{copy.work}</span><Arrow /></a></div>
+    <noscript><p lang="es">No encontramos esta página. <a href="/es/">Volver al inicio</a> · <a href="/es/#work">Ver los proyectos</a></p></noscript>
   </section>
 </BaseLayout>

@@ -2,6 +2,12 @@
 import { Image } from 'astro:assets';
 import engineeringWorkshop from '../assets/engineering-workshop.png';
 import Arrow from './Arrow.astro';
+import type { Locale } from '../i18n/locale';
+import { translations } from '../i18n/translations';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const copy = translations[locale].home;
 ---
 
 <figure class="hero-art">
@@ -19,5 +25,5 @@ import Arrow from './Arrow.astro';
     />
     <img class="hero-art-logo" src="/favicon.svg" width="160" height="160" alt="" />
   </div>
-  <figcaption class="hero-art-caption">Ideas<Arrow />production</figcaption>
+  <figcaption class="hero-art-caption">{copy.ideas}<Arrow />{copy.production}</figcaption>
 </figure>

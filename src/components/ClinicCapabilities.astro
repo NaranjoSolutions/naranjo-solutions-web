@@ -1,26 +1,26 @@
 ---
 import ClinicIcon from './ClinicIcon.astro';
+import type { Locale } from '../i18n/locale';
+import { translations } from '../i18n/translations';
 
 interface Props {
-  capabilities: string[];
+  locale: Locale;
+  capabilities: { id: string; label: string }[];
 }
 
-const { capabilities } = Astro.props;
-const capabilityDetails: Record<string, { icon: 'website' | 'booking' | 'dashboard' | 'database'; description: string }> = {
-  'Public-facing website': { icon: 'website', description: 'The clinic’s public presence, brought together in a React website.' },
-  'Online booking': { icon: 'booking', description: 'An online booking experience connected to the clinic platform.' },
-  'Admin dashboard': { icon: 'dashboard', description: 'A separate interface for clinic administration.' },
-  'Backend API & database': { icon: 'database', description: 'FastAPI services and PostgreSQL persistence connect the interfaces.' },
-};
+const { locale, capabilities } = Astro.props;
+const copy = translations[locale];
+const capabilityIcons = { website: 'website', booking: 'booking', dashboard: 'dashboard', database: 'database' } as const;
 ---
 
-<ul class="clinic-capabilities" aria-label="Delivered capabilities">
+<ul class="clinic-capabilities" aria-label={copy.project.capabilities}>
   {capabilities.map((capability) => {
-    const details = capabilityDetails[capability];
+    const capabilityId = capability.id as keyof typeof capabilityIcons;
+    const description = copy.clinic.descriptions[capabilityId];
     return (
       <li>
-        <span class="capability-icon"><ClinicIcon kind={details?.icon ?? 'website'} /></span>
-        <div><strong>{capability}</strong>{details && <p>{details.description}</p>}</div>
+        <span class="capability-icon"><ClinicIcon kind={capabilityIcons[capabilityId] ?? 'website'} /></span>
+        <div><strong>{capability.label}</strong>{description && <p>{description}</p>}</div>
       </li>
     );
   })}
