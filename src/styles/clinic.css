@@ -1,0 +1,149 @@
+.clinic-overview { min-width: 0; }
+.clinic-art { position: relative; overflow: hidden; padding: 1.1rem; border: 1px solid #e0eafb; border-radius: 12px; background: radial-gradient(ellipse at 85% 10%, #dbe9ff 0, transparent 55%), linear-gradient(135deg, #edf4ff, #f8fbff); color: #12234a; color-scheme: light; }
+.clinic-art-heading { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.clinic-art-heading .eyebrow { color: #173acb; font-size: 0.57rem; }
+.diagram-label { padding: 0.25rem 0.5rem; border: 1px solid #c9d8f4; border-radius: 4px; background: #ffffffb3; color: #485d83; font-family: var(--mono); font-size: 0.53rem; }
+.clinic-art-body { position: relative; display: grid; align-items: center; min-height: 20rem; padding-block: 1.5rem; }
+.clinic-art-copy { position: relative; z-index: 1; align-self: start; }
+.clinic-art-title { max-width: 20rem; font-size: clamp(2.3rem, 5vw, 3.8rem); font-weight: 750; line-height: 0.98; letter-spacing: -0.065em; }
+.clinic-art-subtitle { max-width: 10rem; margin-top: 0.85rem; color: #485d83; font-size: 0.82rem; line-height: 1.5; }
+.clinic-spine-scene { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.spine-illustration { position: absolute; top: 4.5rem; right: 0; width: 65%; max-width: 400px; height: auto; transform: rotate(-13deg); }
+.spine-orbit { position: absolute; right: -4rem; bottom: -5rem; width: 24rem; height: 24rem; border: 1px solid #ffffffc9; border-radius: 50%; }
+.spine-orbit-inner { width: 19rem; height: 19rem; right: -1.5rem; bottom: -2.5rem; }
+.spine-callout { display: none; }
+.clinic-previews { position: relative; z-index: 1; display: grid; gap: 0.85rem; }
+.clinic-preview { position: relative; min-width: 0; padding: 0.4rem; border: 1px solid #ffffff; border-radius: 12px; background: #ffffffed; box-shadow: 0 12px 30px #173acb08; }
+.interface-preview { height: 190px; overflow: hidden; border: 1px solid #e4ecf8; border-radius: 8px; background: #fff; font-size: 0.56rem; line-height: 1.4; }
+.browser-bar { display: flex; align-items: center; gap: 4px; height: 20px; padding-inline: 8px; background: #f0f5fd; color: #485d83; font-family: var(--mono); font-size: 0.4rem; }
+.browser-bar i { width: 4px; height: 4px; border-radius: 50%; background: #93a4c0; }
+.browser-bar > span { margin-left: auto; }
+.website-preview-nav { display: flex; align-items: center; justify-content: space-between; gap: 0.3rem; padding: 9px 8px; font-size: 0.47rem; }
+.website-preview-nav > span:first-child { color: #173acb; font-weight: 700; }
+.website-preview-hero { position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; height: 135px; padding: 8px 10px; background: linear-gradient(120deg, #eef4ff, #d9e8ff); }
+.website-preview-hero > div { position: relative; z-index: 1; }
+.preview-eyebrow { display: block; margin-bottom: 5px; color: #173acb; font-size: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.website-preview-hero strong { display: block; font-size: clamp(0.9rem, 1.1vw, 1.3rem); line-height: 1.05; letter-spacing: -0.05em; }
+.website-preview-hero img { position: absolute; width: 48%; height: 145px; right: -5px; top: -5px; object-fit: contain; transform: rotate(-15deg); }
+.preview-copy-line { display: block; width: 80%; height: 3px; margin-top: 7px; background: #a8badd; border-radius: 2px; }
+.preview-copy-short { width: 55%; margin-top: 4px; }
+.preview-action { display: inline-block; padding: 5px 7px; margin-top: 9px; border-radius: 4px; background: #173acb; color: #fff; font-size: 0.42rem; }
+.booking-preview { padding: 10px; }
+.booking-preview > strong { display: block; font-size: 0.63rem; letter-spacing: -0.02em; }
+.booking-preview-body { display: grid; grid-template-columns: minmax(0, 1fr) 2.7rem; gap: 6px; margin-top: 10px; }
+.preview-calendar { padding: 5px; border: 1px solid #e6edf9; border-radius: 5px; background: #fafcff; }
+.calendar-heading { display: flex; justify-content: space-between; align-items: center; font-size: 0.42rem; font-weight: 650; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px 1px; margin-top: 6px; font-size: 0.42rem; text-align: center; }
+.calendar-grid > span { display: grid; place-items: center; min-height: 14px; }
+.calendar-weekday { color: #57647b; }
+.calendar-selected { border-radius: 3px; background: #173acb; color: #fff; }
+.preview-times { display: grid; align-content: start; gap: 6px; padding-top: 4px; font-size: 0.42rem; text-align: center; }
+.preview-times > span { padding: 5px 2px; border: 1px solid #e2eaf8; border-radius: 4px; }
+.preview-times .preview-time-selected { border-color: #173acb; background: #173acb; color: #fff; }
+.booking-preview-note { display: block; margin-top: 8px; color: #57647b; font-size: 0.43rem; }
+.dashboard-preview { display: grid; grid-template-columns: 30% minmax(0, 1fr); }
+.dashboard-preview-nav { display: grid; align-content: start; gap: 8px; padding: 10px 5px; background: #12234a; color: #d6e2f8; font-size: 0.42rem; }
+.dashboard-wordmark { margin-bottom: 6px; font-size: 0.75rem; font-weight: 750; letter-spacing: -0.06em; }
+.dashboard-nav-active { margin-inline: -2px; padding: 5px 2px; border-radius: 3px; background: #21457b; }
+.dashboard-preview-main { min-width: 0; padding: 10px 7px; }
+.dashboard-preview-main > strong { display: block; font-size: 0.58rem; }
+.dashboard-search { padding: 5px; margin-top: 9px; border: 1px solid #e5edf9; border-radius: 3px; color: #57647b; font-size: 0.4rem; }
+.dashboard-table-heading, .dashboard-table-row { display: flex; justify-content: space-between; align-items: center; gap: 4px; font-size: 0.4rem; }
+.dashboard-table-heading { padding-block: 7px 4px; color: #57647b; }
+.dashboard-table-row { padding-block: 5px; border-top: 1px solid #edf2fa; }
+.dashboard-status { padding: 2px 3px; border-radius: 8px; background: #e5f5f0; color: #306754; font-size: 0.36rem; }
+.dashboard-table-row:nth-of-type(5) .dashboard-status { background: #fff0d6; color: #896433; }
+.dashboard-bars { display: flex; align-items: flex-end; gap: 5px; height: 22px; margin-top: 7px; padding-inline: 5px; }
+.dashboard-bars > span { flex: 1; height: 45%; border-radius: 2px 2px 0 0; background: #c9d9fd; }
+.dashboard-bars > span:nth-child(2n) { height: 80%; background: #7299f4; }
+.dashboard-bars > span:nth-child(3n) { height: 65%; }
+.preview-caption { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.8rem 0.4rem 0.6rem; }
+.preview-caption-icon { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; border-radius: 9px; background: #eff4ff; color: #173acb; }
+.clinic-icon { width: 23px; height: 23px; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.preview-caption .clinic-icon { width: 19px; height: 19px; }
+.preview-caption p { color: #485d83; font-size: 0.68rem; line-height: 1.45; }
+.preview-caption .preview-title { margin-bottom: 0.2rem; color: #12234a; font-size: 0.76rem; font-weight: 700; letter-spacing: -0.025em; }
+.clinic-backend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #cbdcf8; color: #485d83; font-family: var(--mono); font-size: 0.55rem; }
+.clinic-backend strong { font-weight: 500; }
+.clinic-overview figcaption { padding-top: 0.75rem; color: var(--muted); font-family: var(--mono); font-size: 0.6rem; }
+.featured-project.orthopedic-project { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+.orthopedic-project .project-copy { min-width: 0; padding-top: 0; }
+.orthopedic-project .project-copy::before { content: ''; display: block; width: 2.5rem; height: 3px; margin-bottom: 1.25rem; background: var(--blue); }
+.orthopedic-project .project-copy h3 { font-size: clamp(2rem, 3.25vw, 3.3rem); font-weight: 750; letter-spacing: -0.06em; }
+.orthopedic-project .project-summary { max-width: 34rem; line-height: 1.6; }
+.clinic-capabilities { display: grid; gap: 1.15rem; margin-block: 1.75rem; list-style: none; }
+.clinic-capabilities li { display: flex; align-items: flex-start; gap: 0.85rem; min-width: 0; }
+.capability-icon { display: grid; place-items: center; flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: var(--wash); color: var(--blue); }
+.clinic-capabilities strong { display: block; color: var(--ink); font-size: 0.85rem; font-weight: 650; line-height: 1.4; }
+.clinic-capabilities p { margin-top: 0.25rem; color: var(--muted); font-size: 0.79rem; line-height: 1.5; }
+.orthopedic-project .stack-line { padding-top: 1rem; border-top: 1px solid var(--line); }
+.project-button { min-width: 14rem; border-radius: 7px; }
+.orthopedic-case .case-header { padding-bottom: 2.5rem; }
+.orthopedic-case .case-header h1 { max-width: 55rem; color: var(--ink); font-family: var(--body); font-size: clamp(3rem, 7.5vw, 6rem); font-weight: 750; line-height: 1.02; letter-spacing: -0.065em; }
+.orthopedic-case .case-summary { max-width: 43rem; font-size: clamp(1rem, 1.7vw, 1.2rem); }
+.case-technology { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; list-style: none; }
+.case-technology li { padding: 0.35rem 0.75rem; border: 1px solid var(--line); border-radius: 5px; background: var(--wash); color: var(--muted); font-family: var(--mono); font-size: 0.7rem; }
+.orthopedic-case .case-details { gap: 2.5rem; }
+.orthopedic-case .case-facts { display: block; align-self: start; padding: 1.5rem; border: 1px solid var(--line); border-radius: 10px; background: var(--wash); }
+.orthopedic-case .case-facts .clinic-capabilities { margin-block: 1.5rem; font-size: inherit; line-height: inherit; }
+.orthopedic-case .capability-icon { border: 1px solid var(--line); }
+.orthopedic-case .case-privacy { padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.orthopedic-case .prose h2 { font-size: 1.8rem; font-weight: 650; letter-spacing: -0.04em; }
+
+@media (min-width: 640px) {
+  .clinic-art { padding: 1.75rem; }
+  .clinic-art-heading .eyebrow { font-size: 0.63rem; }
+  .clinic-art-body { min-height: 21rem; }
+  .clinic-art-copy { align-self: center; }
+  .clinic-art-subtitle { max-width: none; font-size: 0.95rem; }
+  .spine-illustration { top: -3rem; right: 1%; width: 52%; max-width: 420px; }
+  .spine-callout { position: absolute; right: 0; bottom: 2.5rem; display: grid; gap: 0.2rem; padding: 0.7rem 0.85rem; border: 1px solid #fff; border-radius: 8px; background: #ffffffed; box-shadow: 0 8px 20px #173acb09; font-size: 0.65rem; }
+  .spine-callout > span:last-child { color: #485d83; font-size: 0.58rem; }
+  .callout-dot { position: absolute; left: -2.8rem; top: 1.2rem; width: 9px; height: 9px; border: 2px solid #fff; border-radius: 50%; background: #c83c24; box-shadow: 0 0 0 1px #c83c24; }
+  .callout-dot::after { position: absolute; content: ''; left: 7px; top: 2px; width: 2.25rem; border-top: 1px solid #c83c24; }
+  .clinic-previews { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+  .clinic-preview + .clinic-preview::before { position: absolute; z-index: 2; content: ''; left: -0.8rem; top: 6rem; width: 0.8rem; border-top: 1px dashed #7299f4; }
+  .preview-caption { gap: 0.5rem; padding-inline: 0.2rem; }
+  .preview-caption-icon { width: 28px; height: 28px; }
+  .preview-caption .preview-title { font-size: 0.7rem; }
+  .preview-caption p { font-size: 0.62rem; }
+  .orthopedic-project .clinic-capabilities { grid-template-columns: 1fr 1fr; gap: 1.25rem 2rem; }
+  .orthopedic-case .clinic-art { padding: 2.5rem; }
+  .orthopedic-case .clinic-art-body { min-height: 26rem; }
+  .orthopedic-case .clinic-art-title { font-size: clamp(3rem, 6vw, 5rem); }
+  .orthopedic-case .spine-illustration { top: -5rem; right: 10%; width: 46%; max-width: 460px; }
+  .orthopedic-case .interface-preview { height: 215px; }
+  .orthopedic-case .website-preview-hero { height: 160px; }
+  .orthopedic-case .website-preview-hero img { height: 170px; }
+  .orthopedic-case .website-preview-hero strong { font-size: clamp(1rem, 1.8vw, 1.7rem); }
+  .orthopedic-case .preview-caption { padding-block: 1rem; }
+  .orthopedic-case .preview-caption .preview-title { font-size: 0.85rem; }
+  .orthopedic-case .preview-caption p { font-size: 0.73rem; }
+}
+
+@media (min-width: 960px) {
+  .orthopedic-case .case-header { padding-top: 1rem; padding-bottom: 3.5rem; }
+  .orthopedic-case .case-details { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 4rem; margin-top: 4rem; }
+  .orthopedic-case .clinic-art { padding: 3rem; }
+  .orthopedic-case .clinic-art-body { min-height: 25rem; }
+  .orthopedic-case .spine-callout { right: 4rem; bottom: 5rem; }
+  .orthopedic-case .interface-preview { height: 235px; }
+  .orthopedic-case .website-preview-hero { height: 180px; }
+  .orthopedic-case .website-preview-hero img { height: 185px; }
+  .orthopedic-case .booking-preview { padding: 1rem; }
+  .orthopedic-case .calendar-grid { gap: 5px; font-size: 0.55rem; }
+  .orthopedic-case .calendar-grid > span { min-height: 20px; }
+  .orthopedic-case .dashboard-preview-nav { padding: 1rem 0.6rem; gap: 12px; font-size: 0.55rem; }
+  .orthopedic-case .dashboard-preview-main { padding: 1rem; }
+  .orthopedic-case .dashboard-table-row { padding-block: 8px; }
+}
+
+@media (min-width: 1100px) {
+  .featured-project.orthopedic-project { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 2.25rem; align-items: center; }
+  .orthopedic-project .clinic-art { padding: 1.6rem; }
+  .orthopedic-project .clinic-art-body { min-height: 19rem; }
+  .orthopedic-project .clinic-art-title { font-size: clamp(2.6rem, 3.5vw, 3.6rem); }
+  .orthopedic-project .spine-illustration { top: -2rem; right: -1rem; width: 55%; }
+  .orthopedic-project .clinic-capabilities { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .orthopedic-project .preview-caption-icon { width: 26px; height: 26px; }
+}

@@ -1,0 +1,14 @@
+---
+interface Props {
+  kind: 'website' | 'booking' | 'dashboard' | 'database';
+}
+
+const { kind } = Astro.props;
+---
+
+<svg class="clinic-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+  {kind === 'website' && <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18Z" /></>}
+  {kind === 'booking' && <><rect x="4" y="5" width="16" height="16" rx="2" /><path d="M8 3v4m8-4v4M4 11h16m-11 4h2m3 0h2m-7 3h2" /></>}
+  {kind === 'dashboard' && <path d="M5 20V10m7 10V4m7 16v-7M3 21h18" />}
+  {kind === 'database' && <><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M4 5v14c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0" /></>}
+</svg>

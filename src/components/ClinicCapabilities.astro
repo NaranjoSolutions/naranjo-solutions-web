@@ -1,0 +1,27 @@
+---
+import ClinicIcon from './ClinicIcon.astro';
+
+interface Props {
+  capabilities: string[];
+}
+
+const { capabilities } = Astro.props;
+const capabilityDetails: Record<string, { icon: 'website' | 'booking' | 'dashboard' | 'database'; description: string }> = {
+  'Public-facing website': { icon: 'website', description: 'The clinic’s public presence, brought together in a React website.' },
+  'Online booking': { icon: 'booking', description: 'An online booking experience connected to the clinic platform.' },
+  'Admin dashboard': { icon: 'dashboard', description: 'A separate interface for clinic administration.' },
+  'Backend API & database': { icon: 'database', description: 'FastAPI services and PostgreSQL persistence connect the interfaces.' },
+};
+---
+
+<ul class="clinic-capabilities" aria-label="Delivered capabilities">
+  {capabilities.map((capability) => {
+    const details = capabilityDetails[capability];
+    return (
+      <li>
+        <span class="capability-icon"><ClinicIcon kind={details?.icon ?? 'website'} /></span>
+        <div><strong>{capability}</strong>{details && <p>{details.description}</p>}</div>
+      </li>
+    );
+  })}
+</ul>
