@@ -1,0 +1,44 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Arrow from '../../components/Arrow.astro';
+import ClinicOverview from '../../components/ClinicOverview.astro';
+import Contact from '../../components/Contact.astro';
+import { siteConfig } from '../../config/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('work');
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'work'>;
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${project.data.title} — ${siteConfig.brand}`} description={project.data.description}>
+  <article class="case-study container">
+    <header class="case-header">
+      <a class="text-link back-link" href="/#work"><Arrow />Back to selected work</a>
+      <p class="eyebrow">{project.data.category}</p>
+      <h1>{project.data.title}<span class="accent-period">.</span></h1>
+      <p class="case-summary">{project.data.summary}</p>
+    </header>
+    {project.id === 'orthopedic-spine' && <ClinicOverview />}
+    <div class="case-details">
+      <div class="case-facts" role="group" aria-label="Project details">
+        <div><h2 class="eyebrow">Delivered capabilities</h2><ul>{project.data.capabilities.map((capability) => <li>{capability}</li>)}</ul></div>
+        <div><h2 class="eyebrow">Technology</h2><ul>{project.data.stack.map((technology) => <li>{technology}</li>)}</ul></div>
+        <p class="case-privacy">Client repositories are private.<br />No clinic or patient data is shown.</p>
+      </div>
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+  <Contact />
+</BaseLayout>

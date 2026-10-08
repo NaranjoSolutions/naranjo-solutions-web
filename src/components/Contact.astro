@@ -1,0 +1,28 @@
+---
+import Arrow from './Arrow.astro';
+import { siteConfig } from '../config/site';
+---
+
+<section class="contact-section" id="contact" aria-labelledby="contact-heading">
+  <div class="container contact-grid">
+    <div>
+      <p class="eyebrow">Let’s make it happen</p>
+      <h2 id="contact-heading">A good idea.<br />A solid next step.</h2>
+    </div>
+    <div class="contact-copy">
+      <p>Have a website, a product, or a workflow that needs a better way forward? Let’s talk about what you want to build.</p>
+      <a class="button button-white" href={siteConfig.contact.url}>{siteConfig.contact.label}<Arrow diagonal /></a>
+      <dl class="contact-methods">
+        <div>
+          <dt>Email</dt>
+          <dd><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd><a href={`tel:${siteConfig.contact.phone.number}`}>{siteConfig.contact.phone.display}</a></dd>
+        </div>
+      </dl>
+      <p class="contact-destination">Continue to my personal site<br /><a href={siteConfig.contact.url}>{siteConfig.contact.display}<span aria-hidden="true"> ↗</span></a></p>
+    </div>
+  </div>
+</section>
