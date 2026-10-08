@@ -1,6 +1,6 @@
 # Naranjo Solutions
 
-An English and Spanish portfolio and consulting website for Alonso Villanueva, Senior Software Engineer & Team Lead. Built with Astro, TypeScript, and plain CSS, with a featured Orthopedic Spine clinic platform case study.
+An English and Spanish portfolio and consulting website for Alonso Villanueva, Senior Software Engineer. Built with Astro, TypeScript, and plain CSS, with a featured Orthopedic Spine clinic platform case study.
 
 ## Local development
 
@@ -42,7 +42,7 @@ When verifying languages, check fresh English/Spanish browser preferences, unsup
 
 ## Theme preference
 
-The header's sun/moon button switches between light and dark. It shows a moon to switch to dark mode and a sun to switch to light mode. The site follows the device setting, including changes while the page is open, until the visitor clicks the button. That explicit choice is saved under `naranjo-theme` in localStorage and applies across pages and reloads. Clear that saved preference to follow the device setting again.
+The header’s sun/moon button switches between light and dark. It shows a moon to switch to dark mode and a sun to switch to light mode. The site follows the device setting, including changes while the page is open, until the visitor clicks the button. That explicit choice is saved under `naranjo-theme` in localStorage and applies across pages and reloads. Clear that saved preference to follow the device setting again.
 
 The theme is applied before page content renders. Without JavaScript, the site follows the device setting and hides the button. If storage is unavailable, switching still works for the current page. The logo, hero artwork, and light clinic illustration panel retain their original colors.
 

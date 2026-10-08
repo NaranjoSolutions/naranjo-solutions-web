@@ -10,9 +10,9 @@ const en = {
   },
   site: {
     description: 'Freelance software development and consulting by Alonso Villanueva. Websites, applications, backend APIs, automation, and deployment.',
-    role: 'Senior Software Engineer & Team Lead',
+    role: 'Senior Software Engineer',
     biography: 'I’m Alonso Villanueva, a Senior Software Engineer. Naranjo Solutions is my freelance and consulting practice, where I build modern, scalable software for clients—from the first conversation to deployment.',
-    contactLabel: 'Connect with us',
+    contactLabel: 'Connect with me',
     services: [
       { title: 'Websites & applications', description: 'A clear public presence, a new product, or a tool that helps your team get work done. Built around the people who will use it.', capabilities: ['Business websites', 'Web applications', 'Mobile & cross-platform apps'], tools: 'React · TypeScript · Vite · Ant Design' },
       { title: 'Backends & integrations', description: 'The systems behind the interface. APIs, databases, and authentication that connect your product to the rest of your business.', capabilities: ['Backend APIs', 'Database design', 'Authentication & integrations'], tools: 'FastAPI · PostgreSQL · SQLAlchemy · Alembic' },
@@ -81,7 +81,7 @@ const es: Translations = {
   },
   site: {
     description: 'Desarrollo de software y consultoría independiente por Alonso Villanueva. Sitios web, aplicaciones, APIs, automatización y despliegue.',
-    role: 'Ingeniero de software sénior y líder de equipo',
+    role: 'Ingeniero de software sénior',
     biography: 'Soy Alonso Villanueva, ingeniero de software sénior. Naranjo Solutions es mi práctica independiente de desarrollo y consultoría, donde construyo software moderno y escalable para mis clientes, desde la primera conversación hasta el despliegue.',
     contactLabel: 'Conversemos',
     services: [
@@ -93,11 +93,11 @@ const es: Translations = {
   },
   home: {
     eyebrow: 'Desarrollo de software y consultoría independiente',
-    heading: ['Software que', 'impulsa tu', 'negocio'], headingFinal: 'hacia adelante',
+    heading: ['Software que', 'mueve tu', 'negocio'], headingFinal: 'hacia adelante',
     intro: ['Desde tu primera idea hasta el software', 'que sostiene tu negocio. Construyo todo el sistema.'],
     explore: 'Explora mis proyectos', delivery: 'Desarrollo de software y tu ingeniero', capabilities: 'Capacidades de desarrollo',
     strip: ['Web y aplicaciones', 'Backend y APIs', 'Automatización', 'Nube y despliegue'],
-    workEyebrow: 'Proyectos para clientes', workHeading: ['Creado para el', 'mundo real.'],
+    workEyebrow: 'Proyectos destacados para clientes', workHeading: ['Creado para el', 'mundo real.'],
     workIntro: ['Una mirada a cómo una necesidad de negocio', 'se convierte en un sistema de software funcional.'], inside: 'Conoce el proyecto',
     servicesEyebrow: 'Cómo puedo ayudarte', servicesHeading: ['El software adecuado.', 'Para tu próximo paso.'],
     servicesIntro: ['Una parte de tu sistema o la solución completa.', 'Desde el concepto hasta el despliegue.'],
@@ -112,7 +112,7 @@ const es: Translations = {
     email: 'Correo', phone: 'Teléfono', destination: 'Continúa a mi sitio personal',
   },
   project: {
-    back: 'Volver a los proyectos', technology: 'Tecnologías del proyecto', details: 'Detalles del proyecto',
+    back: 'Volver a los proyectos destacados', technology: 'Tecnologías del proyecto', details: 'Detalles del proyecto',
     capabilities: 'Funcionalidades entregadas', technologyHeading: 'Tecnología',
     privacy: ['Los repositorios del cliente son privados.', 'No se muestran datos de la clínica ni de pacientes.'],
   },
