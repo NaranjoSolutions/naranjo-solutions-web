@@ -27,11 +27,11 @@ There is no dedicated test runner, formatter, or lint configuration. Verify the 
 
 ## Theme preference
 
-The header's Theme selector offers System, Light, and Dark. System follows the device setting, including changes while the page is open. Explicit Light or Dark choices are saved under `naranjo-theme` in localStorage and apply across pages and reloads; selecting System removes the saved override.
+The header's sun/moon button switches between light and dark. It shows a moon to switch to dark mode and a sun to switch to light mode. The site follows the device setting, including changes while the page is open, until the visitor clicks the button. That explicit choice is saved under `naranjo-theme` in localStorage and applies across pages and reloads. Clear that saved preference to follow the device setting again.
 
-The theme is applied before page content renders. Without JavaScript, the site follows the device setting and hides the selector. If storage is unavailable, switching still works for the current page. The logo, hero artwork, and light clinic illustration panel retain their original colors.
+The theme is applied before page content renders. Without JavaScript, the site follows the device setting and hides the button. If storage is unavailable, switching still works for the current page. The logo, hero artwork, and light clinic illustration panel retain their original colors.
 
-When verifying themes, check all three page types in light and dark at desktop and 320px mobile widths. Exercise each choice, reloads, navigation, live device-setting changes, keyboard focus, and reduced motion. Also check an invalid saved preference, blocked storage, and JavaScript disabled; inspect initial rendering with a saved dark preference and text contrast, including button hover states.
+When verifying themes, check all three page types in light and dark at desktop and 320px mobile widths. Check the button's top-right position, icon and accessible-label updates, clicks, Enter/Space activation, reloads, navigation, live device-setting changes before and after clicking, keyboard focus, and reduced motion. Also check an invalid saved preference, blocked storage, and JavaScript disabled; inspect initial rendering with a saved dark preference and text contrast, including button hover states.
 
 ## Continuous integration
 

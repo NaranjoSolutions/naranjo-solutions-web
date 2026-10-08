@@ -53,6 +53,12 @@ const navigation = [
           document.querySelectorAll('meta[name="theme-color"]').forEach((metadata) => {
             metadata.content = theme === 'dark' ? '#0d1426' : '#ffffff';
           });
+          const toggle = document.getElementById('theme-toggle');
+          if (toggle) {
+            const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            toggle.setAttribute('aria-label', label);
+            toggle.title = label;
+          }
         };
 
         applyTheme();
@@ -61,19 +67,18 @@ const navigation = [
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-          const selector = document.getElementById('theme-preference');
-          selector.value = preference;
-          selector.addEventListener('change', () => {
-            preference = selector.value;
+          const toggle = document.getElementById('theme-toggle');
+          applyTheme();
+          toggle.addEventListener('click', () => {
+            preference = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
             applyTheme();
             try {
-              if (preference === 'system') localStorage.removeItem(storageKey);
-              else localStorage.setItem(storageKey, preference);
+              localStorage.setItem(storageKey, preference);
             } catch {
               // Keep the selection active for this page when it cannot be saved.
             }
           });
-          selector.parentElement.hidden = false;
+          toggle.hidden = false;
         }, { once: true });
       })();
     </script>
@@ -94,20 +99,21 @@ const navigation = [
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header container">
       <Brand />
-      <label class="theme-control" hidden>
-        <span>Theme</span>
-        <select id="theme-preference" name="theme">
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </label>
       <nav class="site-nav" aria-label="Main navigation">
         {navigation.map((item) => (
           <a href={`${isHome ? '' : '/'}#${item.id}`}>{item.label}</a>
         ))}
         <a class="nav-contact" href={isHome ? '#contact' : '/#contact'}>Contact<Arrow diagonal /></a>
       </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
+        </svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+        </svg>
+      </button>
     </header>
     <main id="main-content" tabindex="-1"><slot /></main>
     <footer class="site-footer container">
