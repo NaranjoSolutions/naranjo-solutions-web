@@ -54,29 +54,28 @@ The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `dev
 
 The workflow needs only read access to repository contents and no secrets. It caches npm downloads using `package-lock.json` and cancels superseded runs for the same branch or pull request.
 
-## Vercel deployment
+## Cloudflare deployment
 
-The site is configured for Vercel's Git integration. `main` is the production branch; `dev` and feature branches receive preview deployments. The static Astro build needs no Vercel adapter or deployment token in GitHub.
+The site is deployed as static assets on Cloudflare Workers through Workers Builds (Git integration). `main` is the production branch; `dev` and feature branches receive preview versions. The static Astro build needs no adapter and no deployment token in GitHub. [`wrangler.jsonc`](wrangler.jsonc) serves `dist` and returns `dist/404.html` with HTTP 404 for unknown routes.
 
 To connect the project:
 
-1. Ensure `main` contains the website and deployment configuration before importing. At setup time, the website is on `dev` and `main` contains only the initial commit; promote the reviewed changes through the repository's pull-request flow first.
-2. In Vercel, import `NaranjoSolutions/naranjo-solutions-web` into your account with project name `naranjo-solutions-web` and the repository root as the root directory.
-3. Select the Astro framework preset and Node.js 24.x. The [Vercel configuration](vercel.json) sets `npm ci` as the install command, `npm run check && npm run build` as the build command, and `dist` as the output directory.
-4. Set the production branch to `main`, keep automatic Git deployments enabled, and enable system environment variables in the project's environment-variable settings.
-5. Record the generated production domain and verify the first deployment. The Vercel project and production URL are **TBD** until the repository is imported.
+1. Ensure `main` contains the website and deployment configuration before importing; promote reviewed changes through the repository's pull-request flow first.
+2. In the Cloudflare dashboard, go to Workers & Pages, create an application, and import `NaranjoSolutions/naranjo-solutions-web`. The Worker name must match `name` in `wrangler.jsonc` (`naranjo-solutions-web`); the root directory is `/`.
+3. Set the build command to `npm run check && npm run build`, the deploy command to `npx wrangler deploy`, and the non-production branch deploy command to `npx wrangler versions upload`.
+4. Set the production branch to `main` and keep branch builds enabled.
+5. Add the build variables `NODE_VERSION=24` and `SITE_URL` (see below).
+6. Record the generated `workers.dev` production URL and verify the first deployment. The production URL is **TBD** until the project is connected.
 
-Vercel runs its own type-check and build before publishing. It does not wait for the GitHub CI result. A failed Vercel check or build prevents that deployment from publishing.
+Cloudflare runs its own type-check and build before publishing. It does not wait for the GitHub CI result. A failed Cloudflare check or build prevents that deployment from publishing.
 
 ### Site origin
 
-The build uses `SITE_URL` when supplied. Otherwise, it uses `https://` plus Vercel's `VERCEL_PROJECT_PRODUCTION_URL`, which points to production even during preview builds. Local builds without either variable omit canonical and Open Graph URLs.
-
-For a future custom domain, set `SITE_URL` to its full HTTPS origin in both Production and Preview environments and redeploy. Configure a sitemap against the same origin when adding one; no sitemap is currently generated.
+The build reads `SITE_URL`, which must be the full HTTPS origin (the custom domain once attached). Set it as a build variable in both production and preview builds, otherwise previews omit canonical and Open Graph URLs. Local builds without it also omit them. Configure a sitemap against the same origin when adding one; no sitemap is currently generated.
 
 ### Deployment verification
 
-Confirm CI passes on a pull request and Vercel supplies a preview URL. After promotion to `main`, verify the production homepage, `/work/orthopedic-spine/`, favicon, and generated hero images. An unknown route must return HTTP 404 and display the custom 404 page. Check that canonical and Open Graph URLs use the production origin, including on preview pages.
+Confirm CI passes on a pull request and Cloudflare supplies a preview URL. After promotion to `main`, verify the production homepage, `/work/orthopedic-spine/`, favicon, and generated hero images. An unknown route must return HTTP 404 and display the custom 404 page. Check that canonical and Open Graph URLs use the production origin, including on preview pages.
 
 ## Updating content
 
@@ -103,4 +102,4 @@ The decorative spine artwork is stored in `src/assets/orthopedic-spine.png`, wit
 
 The contact section provides email (`mailto:`) and phone (`tel:`) links alongside the personal site at `https://alonsovndev.com/`. Contact details are maintained in `src/config/site.ts`. The personal site’s availability is currently unverified; confirm that it is reachable before publication.
 
-Complete the Vercel setup and deployment verification above before publication. Analytics, inquiry forms, and client authentication are not configured.
+Complete the Cloudflare setup and deployment verification above before publication. Analytics, inquiry forms, and client authentication are not configured.
